@@ -96,7 +96,7 @@ const btnSaveOnClick = function() {
 _bpmCtrl.oninput = function() {
     document.getElementById('bpm-lb').innerText = this.value + ' bpm';
   
-    Tone.Transport.bpm.rampTo(this.value, 0.1);
+    Tone.Transport.bpm.rampTo(this.value * 2, 0.1);
 }
 
 const init = function(){
@@ -138,7 +138,7 @@ const initRows = function(){
 }
 
 const initTone = function(){
-    Tone.Transport.bpm.value = _bpm;
+    Tone.Transport.bpm.value = _bpm * 2;
 }
 
 init();
