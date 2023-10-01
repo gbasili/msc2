@@ -2,78 +2,127 @@
 <head>
     <title></title>
 
-    <link rel="stylesheet" href="./style/style.css"></link>
+    <link href="./assets/fontawesome/css/all.css" rel="stylesheet">
+    <link href="./style/style.css" rel="stylesheet" ></link>
+    <link href="./style/slider.css" rel="stylesheet" ></link>
 </head>
 <body>
-    <button id="btnStart">Start</button>
-    <button id="btnStop" style="display: none;">Stop</button>
     <!--
     <button id="btnRecStart">Rec Start</button>
     <button id="btnRecStop">Rec Stop</button>
     -->
 
-    <div class="row">
-        <input type="checkbox" id="ck0-0">
-        <input type="checkbox" id="ck0-1">
-        <input type="checkbox" id="ck0-2">
-        <input type="checkbox" id="ck0-3">
-        <input type="checkbox" id="ck0-4">
-        <input type="checkbox" id="ck0-5">
-        <input type="checkbox" id="ck0-6">
-        <input type="checkbox" id="ck0-7">
-        <input type="checkbox" id="ck0-8">
-        <input type="checkbox" id="ck0-9">
-        <input type="checkbox" id="ck0-10">
-        <input type="checkbox" id="ck0-11">
-        <input type="checkbox" id="ck0-12">
-        <input type="checkbox" id="ck0-13">
-        <input type="checkbox" id="ck0-14">
-        <input type="checkbox" id="ck0-15">
-    </div>
+    <div class="dm-header">
+        <button id="btnStart" class="btn"><i class="fa-solid fa-circle-play"></i></button>
+        <button id="btnPause" class="btn" style="display: none;"><i class="fa-solid fa-pause"></i></button>
+        <button id="btnStop" class="btn" style="display: none;"><i class="fa-solid fa-circle-stop"></i></button>
+        
+        <button id="btnRecord" class="btn"><i class="fa-solid fa-record-vinyl"></i></button>
+        
+        <button id="btnSave" class="btn"><i class="fa-solid fa-floppy-disk"></i></button>
 
-    <div class="row">
-        <input type="checkbox" id="ck1-0">
-        <input type="checkbox" id="ck1-1">
-        <input type="checkbox" id="ck1-2">
-        <input type="checkbox" id="ck1-3">
-        <input type="checkbox" id="ck1-4">
-        <input type="checkbox" id="ck1-5">
-        <input type="checkbox" id="ck1-6">
-        <input type="checkbox" id="ck1-7">
-        <input type="checkbox" id="ck1-8">
-        <input type="checkbox" id="ck1-9">
-        <input type="checkbox" id="ck1-10">
-        <input type="checkbox" id="ck1-11">
-        <input type="checkbox" id="ck1-12">
-        <input type="checkbox" id="ck1-13">
-        <input type="checkbox" id="ck1-14">
-        <input type="checkbox" id="ck1-15">
+        <div class="slider-cnt">
+            <input type="range" min="60" max="240" value="120" class="slider" id="bpm">
+            <label id="bpm-lb" class="bpm-lb">120 bpm</label>
+        </div>
+        
     </div>
+    <div class="dm-body">
+        <span id="tl" class="tl" style="display: none;"></span>
+            
+        <div class="row row-ho">
+            <i class="fa-solid fa-drum"></i>
+            <input type="checkbox" id="ck0-0">
+            <input type="checkbox" id="ck0-1">
+            <input type="checkbox" id="ck0-2">
+            <input type="checkbox" id="ck0-3">
+            <input type="checkbox" id="ck0-4">
+            <input type="checkbox" id="ck0-5">
+            <input type="checkbox" id="ck0-6">
+            <input type="checkbox" id="ck0-7">
+            <input type="checkbox" id="ck0-8">
+            <input type="checkbox" id="ck0-9">
+            <input type="checkbox" id="ck0-10">
+            <input type="checkbox" id="ck0-11">
+            <input type="checkbox" id="ck0-12">
+            <input type="checkbox" id="ck0-13">
+            <input type="checkbox" id="ck0-14">
+            <input type="checkbox" id="ck0-15">
+            <i class="dm-uncheck fa-solid fa-square"></i>
+            <i class="dm-check fa-solid fa-square-check"></i>
+        </div>
 
-    <div class="row">
-        <input type="checkbox" id="ck2-0">
-        <input type="checkbox" id="ck2-1">
-        <input type="checkbox" id="ck2-2">
-        <input type="checkbox" id="ck2-3">
-        <input type="checkbox" id="ck2-4">
-        <input type="checkbox" id="ck2-5">
-        <input type="checkbox" id="ck2-6">
-        <input type="checkbox" id="ck2-7">
-        <input type="checkbox" id="ck2-8">
-        <input type="checkbox" id="ck2-9">
-        <input type="checkbox" id="ck2-10">
-        <input type="checkbox" id="ck2-11">
-        <input type="checkbox" id="ck2-12">
-        <input type="checkbox" id="ck2-13">
-        <input type="checkbox" id="ck2-14">
-        <input type="checkbox" id="ck2-15">
+        <div class="row row-hc">
+            <i class="fa-solid fa-drum"></i>
+            <input type="checkbox" id="ck1-0">
+            <input type="checkbox" id="ck1-1">
+            <input type="checkbox" id="ck1-2">
+            <input type="checkbox" id="ck1-3">
+            <input type="checkbox" id="ck1-4">
+            <input type="checkbox" id="ck1-5">
+            <input type="checkbox" id="ck1-6">
+            <input type="checkbox" id="ck1-7">
+            <input type="checkbox" id="ck1-8">
+            <input type="checkbox" id="ck1-9">
+            <input type="checkbox" id="ck1-10">
+            <input type="checkbox" id="ck1-11">
+            <input type="checkbox" id="ck1-12">
+            <input type="checkbox" id="ck1-13">
+            <input type="checkbox" id="ck1-14">
+            <input type="checkbox" id="ck1-15">
+            <i class="dm-uncheck fa-solid fa-square"></i>
+            <i class="dm-check fa-solid fa-square-check"></i>
+        </div>
+
+        <div class="row row-cl">
+            <i class="fa-solid fa-hands-clapping"></i>
+            <input type="checkbox" id="ck2-0">
+            <input type="checkbox" id="ck2-1">
+            <input type="checkbox" id="ck2-2">
+            <input type="checkbox" id="ck2-3">
+            <input type="checkbox" id="ck2-4">
+            <input type="checkbox" id="ck2-5">
+            <input type="checkbox" id="ck2-6">
+            <input type="checkbox" id="ck2-7">
+            <input type="checkbox" id="ck2-8">
+            <input type="checkbox" id="ck2-9">
+            <input type="checkbox" id="ck2-10">
+            <input type="checkbox" id="ck2-11">
+            <input type="checkbox" id="ck2-12">
+            <input type="checkbox" id="ck2-13">
+            <input type="checkbox" id="ck2-14">
+            <input type="checkbox" id="ck2-15">
+            <i class="dm-uncheck fa-solid fa-square"></i>
+            <i class="dm-check fa-solid fa-square-check"></i>
+        </div>
+
+        <div class="row row-ki">
+            <i class="fa-solid fa-drum-steelpan"></i>
+            <input type="checkbox" id="ck3-0">
+            <input type="checkbox" id="ck3-1">
+            <input type="checkbox" id="ck3-2">
+            <input type="checkbox" id="ck3-3">
+            <input type="checkbox" id="ck3-4">
+            <input type="checkbox" id="ck3-5">
+            <input type="checkbox" id="ck3-6">
+            <input type="checkbox" id="ck3-7">
+            <input type="checkbox" id="ck3-8">
+            <input type="checkbox" id="ck3-9">
+            <input type="checkbox" id="ck3-10">
+            <input type="checkbox" id="ck3-11">
+            <input type="checkbox" id="ck3-12">
+            <input type="checkbox" id="ck3-13">
+            <input type="checkbox" id="ck3-14">
+            <input type="checkbox" id="ck3-15">
+            <i class="dm-uncheck fa-solid fa-square"></i>
+            <i class="dm-check fa-solid fa-square-check"></i>
+        </div>
+
+    </div>
+    <div class="dm-footer">
+
     </div>
     
-    
-    <button id="C4">C4</button>
-    <button id="D4">D4</button>
-    <button id="E4">E4</button>
-
     <script src="./assets/tone.min.js"></script>
     <script src="./script/app.js"></script>
 </body>

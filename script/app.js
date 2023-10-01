@@ -1,33 +1,38 @@
-console.log('work');
+let _bpm = 120;
+var _bpmCtrl = document.getElementById('bpm');
 
-
-
-let _started = false;
 let _bit = -1;
+let _instruments = 4;
 let _maxBit = 16;
-let _instruments = 3;
-let _scheduleEvent = null
 let _sampler = new Tone.Sampler({
     urls: {
-      'C4': 'bass_sample.mp3',
-      'D4': 'clap_sample.mp3',
-      'E4': 'hh_sample.mp3'
+      'A4': 'ones/hihat-closed.wav',
+      'B4': 'ones/hihat-open.wav',
+      'C4': 'ones/clap-basic.wav',
+      'D4': 'ones/kick-clean.wav'
     },
     release: 0.5,
     baseUrl: '/assets/sounds/',
-  }).toDestination();
+ }).toDestination();
+let _scheduleEvent = null;
+let _started = false;
+let _tlPx = 48;
+let _tlStart = 50 + (_tlPx / 2);
 
 const instrumentTryPlay = function(row, bit, time){
     if (document.getElementById('ck' + row + '-' + bit).checked) {
         switch(row){
             case 0:
-                _sampler.triggerAttack('C4', time);
+                _sampler.triggerAttack('A4', time);
                 break;
             case 1:
-                _sampler.triggerAttack('D4', time);
+                _sampler.triggerAttack('B4', time);
                 break;
             case 2:
-                _sampler.triggerAttack('E4', time);
+                _sampler.triggerAttack('C4', time);
+                break;
+            case 3:
+                _sampler.triggerAttack('D4', time);
                 break;
         }
     }
@@ -42,12 +47,17 @@ const onTick = function(time){
     for(var i = 0; i < _instruments; i++){
         instrumentTryPlay(i, _bit, time);
     }
+    document.getElementById('tl').style.left = (_bit * _tlPx + _tlStart).toString() + 'px';
 }
 
 const btnStartOnClick = function() {
     document.getElementById('btnStart').style.display = 'none';
+    //document.getElementById('btnPause').style.display = 'unset';
     document.getElementById('btnStop').style.display = 'unset';
-
+    document.getElementById('tl').style.display = 'unset';
+    document.getElementById('tl').style.left = _tlPx + 'px';
+    
+    _bit = -1;
     _scheduleEvent = Tone.Transport.scheduleRepeat(function(time){
         onTick(time);
     }, "8n");
@@ -56,82 +66,79 @@ const btnStartOnClick = function() {
     _started = true;
 }
 
+const btnPauseOnClick = function() {
+    document.getElementById('btnStart').style.display = 'unset';
+    document.getElementById('btnPause').style.display = 'none';
+    
+    Tone.Transport.pause();
+}
+
 const btnStopOnClick = function() {
     document.getElementById('btnStart').style.display = 'unset';
+    //document.getElementById('btnPause').style.display = 'none';
     document.getElementById('btnStop').style.display = 'none';
+    document.getElementById('tl').style.display = 'none';
+    
     Tone.Transport.clear(_scheduleEvent);
     Tone.Transport.stop();
     _started = false;
 }
 
+const btnRecordOnClick = function() {
+    alert('Not implemented yet');
+}
+
+const btnSaveOnClick = function() {
+    alert('Not implemented yet');
+}
+
+// Update the current slider value (each time you drag the slider handle)
+_bpmCtrl.oninput = function() {
+    document.getElementById('bpm-lb').innerText = this.value + ' bpm';
+  
+    Tone.Transport.bpm.rampTo(this.value, 0.1);
+}
+
 const init = function(){
+    initAudio();
     initButton();
+    initRows();
+    initTone();
+}
+
+const initAudio = function(){
+    //todo
 }
 
 const initButton = function(){
     document.getElementById('btnStart').addEventListener('click', btnStartOnClick);
-    document.getElementById('btnStop').addEventListener('click', btnStopOnClick );
-    //document.getElementById('C4').addEventListener('click', c4OnClick );
-    //document.getElementById('D4').addEventListener('click', d4OnClick );
-    //document.getElementById('E4').addEventListener('click', e4OnClick );
+    document.getElementById('btnPause').addEventListener('click', btnPauseOnClick);
+    document.getElementById('btnStop').addEventListener('click', btnStopOnClick);
+    document.getElementById('btnRecord').addEventListener('click', btnRecordOnClick);
+    document.getElementById('btnSave').addEventListener('click', btnSaveOnClick);
+}
+
+
+const initRows = function(){
+    document.querySelectorAll('.row i.dm-uncheck').forEach((chk) => {
+        chk.addEventListener('click', function(){
+            this.parentElement.querySelectorAll('input[type="checkbox"]').forEach((chk2) => {
+                chk2.checked = false;
+            });
+        });
+    });
+    
+    document.querySelectorAll('.row i.dm-check').forEach((chk) => {
+        chk.addEventListener('click', function(){
+            this.parentElement.querySelectorAll('input[type="checkbox"]').forEach((chk2) => {
+                chk2.checked = true;
+            });
+        });
+    });
+}
+
+const initTone = function(){
+    Tone.Transport.bpm.value = _bpm;
 }
 
 init();
-
-
-/*
-let _sampler;
-let _loop;
-let _c4Open = false;
-
-const preload = function(){
-    _sampler = new Tone.Sampler({
-        urls: {
-          'C4': 'bass_sample.mp3',
-          'D4': 'clap_sample.mp3',
-          'E4': 'hh_sample.mp3'
-        },
-        release: 0.5,
-        baseUrl: '/assets/sounds/',
-      }).toDestination();
-
-    Tone.Transport.bpm.value = 140; // 96 BPM instead of 120
-
-    _loop = new Tone.Loop((time) => {
-        // triggered every eighth note.
-        _c4Open = ! _c4Open;
-        if (_c4Open){
-            //_sampler.triggerAttackRelease('C4', '8n');
-        } else {
-            //_sampler.triggerAttackRelease('D4', '8n');
-            //_sampler.triggerAttackRelease('E4', '8n');
-        }
-
-        console.log(time);
-    }, "8n").start(0);
-    Tone.Transport.start();
-}
-
-preload();
-
-const playNote = function(note){
-    _sampler.triggerAttackRelease(note, "8n")
-}
-
-const c4OnClick = function(){
-    playNote('C4');
-}
-
-const d4OnClick = function(){
-    playNote('D4');
-}
-
-const e4OnClick = function(){
-    playNote('E4');
-    Tone.Transport.stop();
-}
-
-document.getElementById('C4').addEventListener('click', c4OnClick );
-document.getElementById('D4').addEventListener('click', d4OnClick );
-document.getElementById('E4').addEventListener('click', e4OnClick );
-*/
