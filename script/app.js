@@ -89,7 +89,15 @@ const btnRecordOnClick = function() {
 }
 
 const btnSaveOnClick = function() {
-    alert('Not implemented yet');
+    const makeRow = function(selector){
+        let row = [];
+        document.querySelectorAll('.' + selector + ' input[type="checkbox"]').forEach((chk) => {
+            row.push((chk.checked ? 1 : 0));
+        });
+        return row;
+    }
+    const pattern = { ho: makeRow('row-ho'), hc: makeRow('row-hc'), cl: makeRow('row-cl'), ki: makeRow('row-ki')};
+    downloadObjectAsJson(pattern, 'pattern');
 }
 
 // Update the current slider value (each time you drag the slider handle)
@@ -142,3 +150,16 @@ const initTone = function(){
 }
 
 init();
+
+
+
+// UTILS
+function downloadObjectAsJson(obj, fileName){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(obj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href",     dataStr);
+    downloadAnchorNode.setAttribute("download", fileName + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
