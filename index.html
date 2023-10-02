@@ -19,13 +19,18 @@
         
         <button id="btnRecord" class="btn"><i class="fa-solid fa-record-vinyl"></i></button>
         
-        <button id="btnSave" class="btn"><i class="fa-solid fa-floppy-disk"></i></button>
-
         <div class="slider-cnt">
             <input type="range" min="60" max="240" value="120" class="slider" id="bpm">
             <label id="bpm-lb" class="bpm-lb">120 bpm</label>
         </div>
-        
+        <div class="pattern-cnt">
+            <select id="cm-pattern">
+                <option value="">Pattern</option>
+            </select>
+            <button id="btnAdd" class="btn"><i class="fa-solid fa-plus"></i></button>
+            <button id="btnSave" class="btn"><i class="fa-solid fa-floppy-disk"></i></button>
+            <button id="btnDownload" class="btn"><i class="fa-solid fa-download"></i></button>
+        </div>
     </div>
     <div class="dm-body">
         <span id="tl" class="tl" style="display: none;"></span>

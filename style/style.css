@@ -13,6 +13,10 @@ body {
   background-color: black;
 }
 
+select {
+  height: 24px;
+}
+
 .btn {
   background-color: var(--btn-bg-color);
   border: solid 1px var(--btn-border-color);
@@ -26,7 +30,7 @@ body {
   position: relative;
 }
 .dm-header .slider-cnt {
-  left: 150px;
+  left: 100px;
   position: absolute;
   top: -2px;
 }
@@ -39,6 +43,12 @@ body {
   position: absolute;
   top: 4px;
   width: 40%;
+}
+
+.dm-header .pattern-cnt {
+  left: 370px;
+  position: absolute;
+  top: 0px;
 }
 
 .dm-body {

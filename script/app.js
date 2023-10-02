@@ -4,6 +4,7 @@ var _bpmCtrl = document.getElementById('bpm');
 let _bit = -1;
 let _instruments = 4;
 let _maxBit = 16;
+let _patterns = [];
 let _sampler = new Tone.Sampler({
     urls: {
       'A4': 'ones/hihat-closed.wav',
@@ -110,6 +111,7 @@ _bpmCtrl.oninput = function() {
 const init = function(){
     initAudio();
     initButton();
+    initPattern();
     initRows();
     initTone();
 }
@@ -126,6 +128,34 @@ const initButton = function(){
     document.getElementById('btnSave').addEventListener('click', btnSaveOnClick);
 }
 
+const initPattern = function(){
+    _patterns = window.localStorage.getItem("dmpattern");
+    if (true || ! _patterns){
+        _patterns = [
+            { id: 1, name: 'House', bpm: 120, ho: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], hc: [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0 ], cl: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 ], ki: [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 ]},
+            { id: 2, name: 'Rock',  bpm:  80, ho: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 ], hc: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 ], cl: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], ki: [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 ]}
+        ];
+        window.localStorage.setItem("dmpattern", JSON.stringify(_patterns));
+    }
+    _patterns = JSON.parse(window.localStorage.getItem("dmpattern"));
+    
+    const cmPattern = document.getElementById('cm-pattern');
+    _patterns.forEach((pattern) => {
+        cmPattern.options[cmPattern.options.length] = new Option(pattern.name, pattern.id);
+    });
+
+    cmPattern.addEventListener('input', function (event) {
+        if (event.target.value){
+            for (var i = 0; i < _patterns.length; i++) {
+                if (_patterns[i].id == event.target.value){
+                    patternFill(_patterns[i]);
+                    break;
+                }
+            }
+        }
+    }, false);
+
+}
 
 const initRows = function(){
     document.querySelectorAll('.row i.dm-uncheck').forEach((chk) => {
@@ -151,7 +181,19 @@ const initTone = function(){
 
 init();
 
-
+const patternFill = function(pattern){
+    const fillRow = function(selector, seq){
+        let row = [];
+        document.querySelectorAll('.' + selector + ' input[type="checkbox"]').forEach((chk, idx) => {
+            chk.checked = (seq[idx] == 1 ? true : false);
+        });
+    }
+    _bpmCtrl.value = pattern.bpm;
+    fillRow('row-ho', pattern.ho);
+    fillRow('row-hc', pattern.hc);
+    fillRow('row-cl', pattern.cl);
+    fillRow('row-ki', pattern.ki);
+}
 
 // UTILS
 function downloadObjectAsJson(obj, fileName){
