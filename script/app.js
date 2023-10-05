@@ -229,7 +229,6 @@ const initRows = function(){
 }
 
 const initSampler = function(){
-    debugger;
     var urls = {};/*
     {
         'A4': 'ones/hihat-closed.wav',
