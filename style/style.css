@@ -86,6 +86,11 @@ select {
   color: var(--ki)
 }
 
+.cm-instr {
+  height: 30px;
+  width: 200px;
+}
+
 input[type="checkbox"] {
   appearance: none;
   background-color: #fff;
