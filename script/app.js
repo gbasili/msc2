@@ -11,6 +11,7 @@ let _notesKi = [];
 let _patterns = [];
 
 let _sampler = null;
+let _samplerPlayer = null;
 
 let _scheduleEvent = null;
 let _started = false;
@@ -45,6 +46,10 @@ const instrumentTryPlay = function(row, chk, n, time){
     }
 }
 
+const notePlay = function(note){
+    _samplerPlayer.triggerAttackRelease(note, 1);
+}
+
 const onTick = function(time){
     if(_bit >= (_maxBit - 1)){
         _bit = -1;
@@ -56,6 +61,10 @@ const onTick = function(time){
         instrumentTryPlay(i, chk, chk.parentElement.dataset.in, time);
     }
     document.getElementById('tl').style.left = (_bit * _tlPx + _tlStart).toString() + 'px';
+}
+
+const btnPlayNoteOnClick = function(ev){
+    e.target.parentElement.dataset.in = e.target.value;
 }
 
 const btnStartOnClick = function() {
@@ -128,7 +137,7 @@ const btnSaveOnClick = function() {
 }
 
 const cmNoteOnInput = function(e){
-    e.target.parentElement.dataset.in = e.target.value;
+    notePlay(e.target.dataset.nt + e.target.parentElement.dataset.in);
 }
 
 // Update the current slider value (each time you drag the slider handle)
@@ -165,17 +174,23 @@ const initNotes = function(){
     _notesHo = [ { n:'A1', u: 'ones/hihat-open.wav'} ];
     _notesHc = [ { n:'B1', u: 'ones/hihat-closed.wav'} ];
     _notesCl = [ { n:'C1', u: 'ones/clap-1.wav'}, { n:'C2', u: 'ones/clap-2.mp3'} ];
-    _notesKi = [ { n:'D1', u: 'ones/ones/kick-clean.wav'} ];
+    _notesKi = [ { n:'D1', u: 'ones/kick-clean.wav'} ];
     const initNoteCombo = function(select, notes){
         for(var i = 0; i < notes.length; i++){
             select.options[select.options.length] = new Option('N ' + (i + 1), i + 1);
         }
-        select.addEventListener('input', cmNoteOnInput )
+        select.addEventListener('input', cmNoteOnInput );
+
     }
     initNoteCombo(document.getElementById('cm-ho'), _notesHo);
     initNoteCombo(document.getElementById('cm-hc'), _notesHc);
     initNoteCombo(document.getElementById('cm-cl'), _notesCl);
     initNoteCombo(document.getElementById('cm-ki'), _notesKi);
+
+    document.getElementById('btn-ho').addEventListener('click', btnPlayNoteOnClick);
+    document.getElementById('btn-hc').addEventListener('click', btnPlayNoteOnClick);
+    document.getElementById('btn-cl').addEventListener('click', btnPlayNoteOnClick);
+    document.getElementById('btn-ki').addEventListener('click', btnPlayNoteOnClick);
 }
 
 const initPattern = function(){
@@ -229,14 +244,7 @@ const initRows = function(){
 }
 
 const initSampler = function(){
-    var urls = {};/*
-    {
-        'A4': 'ones/hihat-closed.wav',
-        'B4': 'ones/hihat-open.wav',
-        'C4': 'ones/clap-basic.wav',
-        'D4': 'ones/kick-clean.wav'
-      }*/
-
+    var urls = {};
     const makeUrl = function(notes){
         for(var i = 0; i < notes.length; i++){
             urls[notes[i].n] = notes[i].u;
@@ -248,6 +256,12 @@ const initSampler = function(){
     makeUrl(_notesKi);
     
     _sampler = new Tone.Sampler({
+        urls: urls,
+        release: 0.5,
+        baseUrl: '/assets/sounds/',
+     }).toDestination();
+
+     _samplerPlayer = new Tone.Sampler({
         urls: urls,
         release: 0.5,
         baseUrl: '/assets/sounds/',
