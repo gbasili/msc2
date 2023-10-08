@@ -63,7 +63,7 @@ const onTick = function(time){
     document.getElementById('tl').style.left = (_bit * _tlPx + _tlStart).toString() + 'px';
 }
 
-const btnPlayNoteOnClick = function(ev){
+const btnPlayNoteOnClick = function(e){
     e.target.parentElement.dataset.in = e.target.value;
 }
 
