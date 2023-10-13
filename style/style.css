@@ -17,6 +17,10 @@ select {
   height: 24px;
 }
 
+button i {
+  pointer-events: none;
+}
+
 .btn {
   background-color: var(--btn-bg-color);
   border: solid 1px var(--btn-border-color);
@@ -154,4 +158,36 @@ input[type="checkbox"]:checked::before {
 .row i.dm-check,
 .row i.dm-uncheck {
   cursor: pointer;
+}
+
+.dm-body .row button {
+  height: 30px;
+}
+
+.dm-body .row button#btn-ho {
+  background-color: var(--ho);
+}
+.dm-body .row select#cm-ho {
+  background-color: var(--ho);
+}
+
+.dm-body .row button#btn-hc {
+  background-color: var(--hc);
+}
+.dm-body .row select#cm-hc {
+  background-color: var(--hc);
+}
+
+.dm-body .row button#btn-cl {
+  background-color: var(--cl);
+}
+.dm-body .row select#cm-cl {
+  background-color: var(--cl);
+}
+
+.dm-body .row button#btn-ki {
+  background-color: var(--ki);
+}
+.dm-body .row select#cm-ki {
+  background-color: var(--ki);
 }

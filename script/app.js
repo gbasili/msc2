@@ -15,6 +15,8 @@ let _samplerPlayer = null;
 
 let _scheduleEvent = null;
 let _started = false;
+let _recording = false;
+let _recorder = null;
 let _tlPx = 48;
 let _tlStart = 50 + (_tlPx / 2);
 
@@ -63,11 +65,35 @@ const onTick = function(time){
     document.getElementById('tl').style.left = (_bit * _tlPx + _tlStart).toString() + 'px';
 }
 
+const onTickRecording = function(time){
+    if (_bit == -1){
+        _recorder.start();
+    }
+
+    if(_bit >= (_maxBit - 1)){
+        _bit = -1;
+        _recorder.stop();
+        btnStopOnClick();
+        return;
+    }
+    _bit++;
+
+    for(var i = 0; i < _instruments; i++){
+        const chk = document.getElementById('ck' + i + '-' + _bit);
+        instrumentTryPlay(i, chk, chk.parentElement.dataset.in, time);
+    }
+    document.getElementById('tl').style.left = (_bit * _tlPx + _tlStart).toString() + 'px';
+}
+
 const btnPlayNoteOnClick = function(e){
-    e.target.parentElement.dataset.in = e.target.value;
+    notePlay(e.target.dataset.nt + e.target.parentElement.dataset.in);
 }
 
 const btnStartOnClick = function() {
+    if (_recording){
+        //TODO Alert
+        return;
+    }
     document.getElementById('btnStart').style.display = 'none';
     //document.getElementById('btnPause').style.display = 'unset';
     document.getElementById('btnStop').style.display = 'unset';
@@ -102,7 +128,32 @@ const btnStopOnClick = function() {
 }
 
 const btnRecordOnClick = function() {
-    alert('Not implemented yet');
+    if (_started){
+        btnStopOnClick();
+    }
+
+    const actx  = Tone.context;
+    const dest  = actx.createMediaStreamDestination();
+    const audio = document.querySelector('audio');
+    _recorder = new MediaRecorder(dest.stream);
+
+    _samplerPlayer.connect(dest);
+    //synth.toMaster();
+    
+    _scheduleEvent = Tone.Transport.scheduleRepeat(function(time){
+        onTickRecording(time);
+    }, "8n");
+    Tone.Transport.start();
+    _recording = true;
+
+    const chunks = [];
+    _recorder.ondataavailable = evt => chunks.push(evt.data);
+    _recorder.onstop = evt => {
+        let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+        audio.src = URL.createObjectURL(blob);
+        _recording = false;
+    };
+
 }
 
 const btnDownloadOnClick = function() {
@@ -137,7 +188,7 @@ const btnSaveOnClick = function() {
 }
 
 const cmNoteOnInput = function(e){
-    notePlay(e.target.dataset.nt + e.target.parentElement.dataset.in);
+    e.target.parentElement.dataset.in = e.target.value;
 }
 
 // Update the current slider value (each time you drag the slider handle)
@@ -179,8 +230,7 @@ const initNotes = function(){
         for(var i = 0; i < notes.length; i++){
             select.options[select.options.length] = new Option('N ' + (i + 1), i + 1);
         }
-        select.addEventListener('input', cmNoteOnInput );
-
+        select.addEventListener('input', cmNoteOnInput);
     }
     initNoteCombo(document.getElementById('cm-ho'), _notesHo);
     initNoteCombo(document.getElementById('cm-hc'), _notesHc);
